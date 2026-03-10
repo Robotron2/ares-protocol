@@ -19,6 +19,7 @@ contract AresProposer {
         uint256 value;
         bytes data;
         uint256 commitTimestamp;
+        uint256 snapshotBlock;
         AresTypes.ProposalState state;
     }
 
@@ -47,6 +48,7 @@ contract AresProposer {
             value: value,
             data: data,
             commitTimestamp: block.timestamp,
+            snapshotBlock: block.number - 1,
             state: AresTypes.ProposalState.Committed
         });
 
