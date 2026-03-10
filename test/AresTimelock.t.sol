@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "forge-std/Test.sol";
-import "../src/modules/AresTimelock.sol";
-import "../src/core/AresRegistry.sol";
-import "../src/libraries/utils/Errors.sol";
+import {Test} from "forge-std/Test.sol";
+import {AresTimelock} from "../src/modules/AresTimelock.sol";
+import {AresRegistry} from "../src/core/AresRegistry.sol";
+import {AresErrors} from "../src/libraries/utils/Errors.sol";
 
 contract AresTimelockTest is Test {
     AresTimelock public timelock;
@@ -67,7 +67,7 @@ contract AresTimelockTest is Test {
         timelock.execute(pId);
     }
 
-    // --- Helpers ---
+    // --- Helper ---
 
     function _setupQueue(uint256 amount) internal returns (bytes32) {
         bytes32 pId = keccak256(abi.encodePacked(block.timestamp));
