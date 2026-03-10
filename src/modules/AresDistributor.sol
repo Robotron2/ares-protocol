@@ -15,8 +15,7 @@ contract AresDistributor {
     mapping(uint256 => bool) public isClaimed;
 
     modifier onlyTimelock() {
-        address timelock = registry.getModule(keccak256("TIMELOCK_MODULE"));
-        if (msg.sender != timelock) revert AresErrors.NotTimelock();
+        _onlyTimelock();
         _;
     }
 
@@ -45,6 +44,11 @@ contract AresDistributor {
         merkleRoot = newRoot;
 
         emit AresEvents.RootUpdated(newRoot);
+    }
+
+    function _onlyTimelock() internal view {
+        address timelock = registry.getModule(keccak256("TIMELOCK_MODULE"));
+        if (msg.sender != timelock) revert AresErrors.NotTimelock();
     }
 
     receive() external payable {}

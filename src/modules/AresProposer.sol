@@ -26,7 +26,7 @@ contract AresProposer {
     mapping(bytes32 => Proposal) public proposals;
 
     modifier onlyParticipant() {
-        if (!registry.isParticipant(msg.sender)) revert AresErrors.NotParticipant();
+        _onlyParticipant();
         _;
     }
 
@@ -87,5 +87,9 @@ contract AresProposer {
 
     function state(bytes32 id) external view returns (uint8) {
         return uint8(proposals[id].state);
+    }
+
+    function _onlyParticipant() internal view {
+        if (!registry.isParticipant(msg.sender)) revert AresErrors.NotParticipant();
     }
 }

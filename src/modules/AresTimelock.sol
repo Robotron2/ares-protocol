@@ -24,8 +24,7 @@ contract AresTimelock is ReentrancyGuard {
     mapping(bytes32 => bool) public vetoed;
 
     modifier onlyProposer() {
-        address proposer = registry.getModule(keccak256("PROPOSER_MODULE"));
-        if (msg.sender != proposer) revert AresErrors.NotProposer();
+        _onlyProposer();
         _;
     }
 
@@ -71,5 +70,10 @@ contract AresTimelock is ReentrancyGuard {
         vetoed[id] = true;
 
         emit AresEvents.ProposalVetoed(id);
+    }
+
+    function _onlyProposer() internal view {
+        address proposer = registry.getModule(keccak256("PROPOSER_MODULE"));
+        if (msg.sender != proposer) revert AresErrors.NotProposer();
     }
 }
