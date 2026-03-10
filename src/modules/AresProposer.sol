@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "../interfaces/IAresRegistry.sol";
-import "../interfaces/IAresTimelock.sol";
-import "../libraries/AresHashing.sol";
-import "../libraries/AresTypes.sol";
+import {IAresRegistry} from "../interfaces/IAresRegistry.sol";
+import {IAresTimelock} from "../interfaces/IAresTimelock.sol";
+import {AresHashing} from "../libraries/AresHashing.sol";
+import {AresTypes} from "../libraries/AresTypes.sol";
 
 import {AresErrors} from "../libraries/utils/Errors.sol";
 import {AresEvents} from "../libraries/utils/Events.sol";

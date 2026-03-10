@@ -12,4 +12,6 @@ library AresErrors {
     error ProposalExists();
     error InvalidState();
     error CommitDelayNotElapsed();
+        error InvalidSigner();
+    error InvalidSignature();
 }
