@@ -1,66 +1,43 @@
-## Foundry
+# ARES Protocol
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+ARES Protocol is a modular treasury execution system designed for governance-controlled funds. The protocol enforces delayed execution, cryptographic authorization, and a strict separation of concerns between governance modules.
 
-Foundry consists of:
+The design goal is to keep the system understandable and auditable while still protecting against common governance and treasury attacks.
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+This repository contains the core implementation and test suite built with **Foundry**.
 
-## Documentation
+# System Overview
 
-https://book.getfoundry.sh/
+ARES splits responsibilities across four independent modules:
 
-## Usage
+- **AresProposer** — manages the proposal lifecycle and governance state machine.
+- **AresSigner** — verifies cryptographic authorization using EIP-712 signatures.
+- **AresTimelock** — holds treasury funds and executes queued proposals after a delay.
+- **AresDistributor** — handles scalable contributor rewards via Merkle proofs.
 
-### Build
+A central **AresRegistry** contract connects these modules. Modules never hardcode each other’s addresses; they resolve them through the registry.
 
-```shell
-$ forge build
-```
+This modular architecture makes the system easier to audit and allows components to be upgraded or replaced independently.
 
-### Test
+# Repository Structure
 
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+src/  
+├── core/  
+│   └── AresRegistry.sol  
+├── interfaces/  
+│   ├── IAresDistributor.sol  
+│   ├── IAresProposer.sol  
+│   ├── IAresRegistry.sol  
+│   ├── IAresSigner.sol  
+│   └── IAresTimelock.sol  
+├── libraries/  
+│   ├── AresHashing.sol  
+│   ├── AresTypes.sol  
+│   └── utils/  
+│   ├── Errors.sol  
+│   └── Events.sol  
+└── modules/  
+├── AresDistributor.sol  
+├── AresProposer.sol  
+├── AresSigner.sol  
+└── AresTimelock.sol
