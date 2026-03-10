@@ -17,4 +17,5 @@ library AresErrors {
     error AlreadyClaimed();
     error InvalidProof();
     error NotTimelock();
+    error WithdrawLimitExceeded();
 }

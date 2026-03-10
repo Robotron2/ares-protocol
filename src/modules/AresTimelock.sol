@@ -7,6 +7,8 @@ import {AresErrors} from "../libraries/utils/Errors.sol";
 import {AresEvents} from "../libraries/utils/Events.sol";
 
 contract AresTimelock is ReentrancyGuard {
+    uint256 public constant MAX_WITHDRAW_BPS = 1000;
+    uint256 public constant BPS_DENOMINATOR = 10000;
     uint256 public constant MIN_DELAY = 2 days;
 
     IAresRegistry public registry;
@@ -19,6 +21,7 @@ contract AresTimelock is ReentrancyGuard {
     }
 
     mapping(bytes32 => QueueItem) public queuedTransactions;
+    mapping(bytes32 => bool) public vetoed;
 
     modifier onlyProposer() {
         address proposer = registry.getModule(keccak256("PROPOSER_MODULE"));
@@ -33,6 +36,9 @@ contract AresTimelock is ReentrancyGuard {
     receive() external payable {}
 
     function queue(bytes32 id, address target, uint256 value, bytes calldata data) external onlyProposer {
+        if (value > (address(this).balance * MAX_WITHDRAW_BPS) / BPS_DENOMINATOR) {
+            revert AresErrors.WithdrawLimitExceeded();
+        }
         queuedTransactions[id] =
             QueueItem({target: target, value: value, data: data, executeAfter: block.timestamp + MIN_DELAY});
 
@@ -41,6 +47,8 @@ contract AresTimelock is ReentrancyGuard {
 
     function execute(bytes32 id) external nonReentrant {
         QueueItem memory item = queuedTransactions[id];
+
+        if (vetoed[id]) revert AresErrors.NotReady();
 
         if (item.executeAfter == 0) revert AresErrors.NotQueued();
 
@@ -55,5 +63,13 @@ contract AresTimelock is ReentrancyGuard {
         require(ok);
 
         emit AresEvents.Executed(id);
+    }
+
+    function veto(bytes32 id) external {
+        if (!registry.isParticipant(msg.sender)) revert AresErrors.NotParticipant();
+
+        vetoed[id] = true;
+
+        emit AresEvents.ProposalVetoed(id);
     }
 }

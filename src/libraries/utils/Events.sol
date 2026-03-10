@@ -12,4 +12,5 @@ library AresEvents {
     event SignatureUsed(address indexed signer, bytes32 proposalHash);
     event Claimed(uint256 index, address account, uint256 amount);
     event RootUpdated(bytes32 newRoot);
+    event ProposalVetoed(bytes32 indexed id);
 }
