@@ -10,4 +10,6 @@ library AresEvents {
     event ProposalQueued(bytes32 indexed proposalId);
     event ProposalCancelled(bytes32 indexed proposalId);
     event SignatureUsed(address indexed signer, bytes32 proposalHash);
+    event Claimed(uint256 index, address account, uint256 amount);
+    event RootUpdated(bytes32 newRoot);
 }
