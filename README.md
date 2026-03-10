@@ -41,3 +41,15 @@ src/
 ├── AresProposer.sol  
 ├── AresSigner.sol  
 └── AresTimelock.sol
+
+# Requirements
+
+- Foundry
+- Solidity `^0.8.20`
+
+# Installation
+
+- Clone the repository:
+- `git clone https://github.com/Robotron2/ares-protocol`
+- cd ares-protocol
+- Install dependencies `forge install`
